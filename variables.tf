@@ -77,16 +77,16 @@ EOT
   type = map(object({
     virtual_machine_id               = string
     r_services_enabled               = optional(bool)
-    sql_connectivity_port            = optional(number, 1433)
-    sql_connectivity_type            = optional(string, "PRIVATE")
+    sql_connectivity_port            = optional(number) # Default: 1433
+    sql_connectivity_type            = optional(string) # Default: "PRIVATE"
     sql_connectivity_update_password = optional(string)
     sql_connectivity_update_username = optional(string)
     sql_license_type                 = optional(string)
     sql_virtual_machine_group_id     = optional(string)
     tags                             = optional(map(string))
     assessment = optional(object({
-      enabled         = optional(bool, true)
-      run_immediately = optional(bool, false)
+      enabled         = optional(bool) # Default: true
+      run_immediately = optional(bool) # Default: false
       schedule = optional(object({
         day_of_week        = string
         monthly_occurrence = optional(number)
@@ -121,13 +121,13 @@ EOT
       service_principal_secret = string
     }))
     sql_instance = optional(object({
-      adhoc_workloads_optimization_enabled = optional(bool, false)
-      collation                            = optional(string, "SQL_Latin1_General_CP1_CI_AS")
-      instant_file_initialization_enabled  = optional(bool, false)
-      lock_pages_in_memory_enabled         = optional(bool, false)
-      max_dop                              = optional(number, 0)
-      max_server_memory_mb                 = optional(number, 2147483647)
-      min_server_memory_mb                 = optional(number, 0)
+      adhoc_workloads_optimization_enabled = optional(bool)   # Default: false
+      collation                            = optional(string) # Default: "SQL_Latin1_General_CP1_CI_AS"
+      instant_file_initialization_enabled  = optional(bool)   # Default: false
+      lock_pages_in_memory_enabled         = optional(bool)   # Default: false
+      max_dop                              = optional(number) # Default: 0
+      max_server_memory_mb                 = optional(number) # Default: 2147483647
+      min_server_memory_mb                 = optional(number) # Default: 0
     }))
     storage_configuration = optional(object({
       data_settings = optional(object({
@@ -140,14 +140,14 @@ EOT
         luns              = list(number)
       }))
       storage_workload_type          = string
-      system_db_on_data_disk_enabled = optional(bool, false)
+      system_db_on_data_disk_enabled = optional(bool) # Default: false
       temp_db_settings = optional(object({
-        data_file_count        = optional(number, 8)
-        data_file_growth_in_mb = optional(number, 512)
-        data_file_size_mb      = optional(number, 256)
+        data_file_count        = optional(number) # Default: 8
+        data_file_growth_in_mb = optional(number) # Default: 512
+        data_file_size_mb      = optional(number) # Default: 256
         default_file_path      = string
-        log_file_growth_mb     = optional(number, 512)
-        log_file_size_mb       = optional(number, 256)
+        log_file_growth_mb     = optional(number) # Default: 512
+        log_file_size_mb       = optional(number) # Default: 256
         luns                   = list(number)
       }))
     }))
