@@ -8,7 +8,11 @@ Optional:
     - sql_connectivity_port
     - sql_connectivity_type
     - sql_connectivity_update_password
+    - sql_connectivity_update_password_key_vault_id (alternative to sql_connectivity_update_password - read from Key Vault instead)
+    - sql_connectivity_update_password_key_vault_secret_name (alternative to sql_connectivity_update_password - read from Key Vault instead)
     - sql_connectivity_update_username
+    - sql_connectivity_update_username_key_vault_id (alternative to sql_connectivity_update_username - read from Key Vault instead)
+    - sql_connectivity_update_username_key_vault_secret_name (alternative to sql_connectivity_update_username - read from Key Vault instead)
     - sql_license_type
     - sql_virtual_machine_group_id
     - tags
@@ -75,15 +79,19 @@ Optional:
 EOT
 
   type = map(object({
-    virtual_machine_id               = string
-    r_services_enabled               = optional(bool)
-    sql_connectivity_port            = optional(number) # Default: 1433
-    sql_connectivity_type            = optional(string) # Default: "PRIVATE"
-    sql_connectivity_update_password = optional(string)
-    sql_connectivity_update_username = optional(string)
-    sql_license_type                 = optional(string)
-    sql_virtual_machine_group_id     = optional(string)
-    tags                             = optional(map(string))
+    virtual_machine_id                                     = string
+    r_services_enabled                                     = optional(bool)
+    sql_connectivity_port                                  = optional(number) # Default: 1433
+    sql_connectivity_type                                  = optional(string) # Default: "PRIVATE"
+    sql_connectivity_update_password                       = optional(string)
+    sql_connectivity_update_password_key_vault_id          = optional(string)
+    sql_connectivity_update_password_key_vault_secret_name = optional(string)
+    sql_connectivity_update_username                       = optional(string)
+    sql_connectivity_update_username_key_vault_id          = optional(string)
+    sql_connectivity_update_username_key_vault_secret_name = optional(string)
+    sql_license_type                                       = optional(string)
+    sql_virtual_machine_group_id                           = optional(string)
+    tags                                                   = optional(map(string))
     assessment = optional(object({
       enabled         = optional(bool) # Default: true
       run_immediately = optional(bool) # Default: false

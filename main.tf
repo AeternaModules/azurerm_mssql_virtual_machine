@@ -1,3 +1,13 @@
+data "azurerm_key_vault_secret" "sql_connectivity_update_password" {
+  for_each     = { for k, v in var.mssql_virtual_machines : k => v if v.sql_connectivity_update_password_key_vault_id != null && v.sql_connectivity_update_password_key_vault_secret_name != null }
+  name         = each.value.sql_connectivity_update_password_key_vault_secret_name
+  key_vault_id = each.value.sql_connectivity_update_password_key_vault_id
+}
+data "azurerm_key_vault_secret" "sql_connectivity_update_username" {
+  for_each     = { for k, v in var.mssql_virtual_machines : k => v if v.sql_connectivity_update_username_key_vault_id != null && v.sql_connectivity_update_username_key_vault_secret_name != null }
+  name         = each.value.sql_connectivity_update_username_key_vault_secret_name
+  key_vault_id = each.value.sql_connectivity_update_username_key_vault_id
+}
 resource "azurerm_mssql_virtual_machine" "mssql_virtual_machines" {
   for_each = var.mssql_virtual_machines
 
@@ -5,8 +15,8 @@ resource "azurerm_mssql_virtual_machine" "mssql_virtual_machines" {
   r_services_enabled               = each.value.r_services_enabled
   sql_connectivity_port            = each.value.sql_connectivity_port
   sql_connectivity_type            = each.value.sql_connectivity_type
-  sql_connectivity_update_password = each.value.sql_connectivity_update_password
-  sql_connectivity_update_username = each.value.sql_connectivity_update_username
+  sql_connectivity_update_password = each.value.sql_connectivity_update_password != null ? each.value.sql_connectivity_update_password : try(data.azurerm_key_vault_secret.sql_connectivity_update_password[each.key].value, null)
+  sql_connectivity_update_username = each.value.sql_connectivity_update_username != null ? each.value.sql_connectivity_update_username : try(data.azurerm_key_vault_secret.sql_connectivity_update_username[each.key].value, null)
   sql_license_type                 = each.value.sql_license_type
   sql_virtual_machine_group_id     = each.value.sql_virtual_machine_group_id
   tags                             = each.value.tags
