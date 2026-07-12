@@ -1,3 +1,7 @@
+output "mssql_virtual_machines_id" {
+  description = "Map of id values across all mssql_virtual_machines, keyed the same as var.mssql_virtual_machines"
+  value       = { for k, v in azurerm_mssql_virtual_machine.mssql_virtual_machines : k => v.id }
+}
 output "mssql_virtual_machines_assessment" {
   description = "Map of assessment values across all mssql_virtual_machines, keyed the same as var.mssql_virtual_machines"
   value       = { for k, v in azurerm_mssql_virtual_machine.mssql_virtual_machines : k => v.assessment }
