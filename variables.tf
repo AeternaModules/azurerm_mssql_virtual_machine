@@ -165,129 +165,198 @@ EOT
       sql_service_account_password       = string
     }))
   }))
-  # --- Unconfirmed validation candidates, derived from azurerm_mssql_virtual_machine's provider source ---
-  # Not auto-enabled: either a bespoke provider validator we can't safely translate,
-  # or a path that crosses a list-typed block (needs its own for_each wrapping).
-  # Review, translate into a real validation{} block above, and delete once confirmed.
-  # path: virtual_machine_id
-  #   source:    [from commonids.ValidateVirtualMachineID] !ok
-  # path: virtual_machine_id
-  #   source:    [from commonids.ValidateVirtualMachineID] err != nil
-  # path: sql_license_type
-  #   source:    validation.StringInSlice value list is not a literal []string - likely a generated PossibleValuesFor*() helper; resolve separately
-  # path: auto_backup.encryption_password
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: auto_backup.manual_schedule.full_backup_frequency
-  #   source:    validation.StringInSlice value list is not a literal []string - likely a generated PossibleValuesFor*() helper; resolve separately
-  # path: auto_backup.manual_schedule.full_backup_start_hour
-  #   condition: value >= 0 && value <= 23
-  #   message:   must be between 0 and 23
-  # path: auto_backup.manual_schedule.full_backup_window_in_hours
-  #   condition: value >= 1 && value <= 23
-  #   message:   must be between 1 and 23
-  # path: auto_backup.manual_schedule.log_backup_frequency_in_minutes
-  #   condition: value >= 5 && value <= 60
-  #   message:   must be between 5 and 60
-  # path: auto_backup.manual_schedule.days_of_week[*]
-  #   source:    validation.StringInSlice value list is not a literal []string - likely a generated PossibleValuesFor*() helper; resolve separately
-  # path: auto_backup.retention_period_in_days
-  #   condition: value >= 1 && value <= 30
-  #   message:   must be between 1 and 30
-  # path: auto_backup.storage_blob_endpoint
-  #   source:    validation.IsURLWithHTTPS(...) - no translation rule yet, add one
-  # path: auto_backup.storage_account_access_key
-  #   source:    validation.StringIsBase64(...) - no translation rule yet, add one
-  # path: auto_patching.day_of_week
-  #   source:    validation.StringInSlice value list is not a literal []string - likely a generated PossibleValuesFor*() helper; resolve separately
-  # path: auto_patching.maintenance_window_duration_in_minutes
-  #   condition: value >= 30 && value <= 180
-  #   message:   must be between 30 and 180
-  # path: auto_patching.maintenance_window_starting_hour
-  #   condition: value >= 0 && value <= 23
-  #   message:   must be between 0 and 23
-  # path: assessment.schedule.weekly_interval
-  #   condition: value >= 1 && value <= 6
-  #   message:   must be between 1 and 6
-  # path: assessment.schedule.monthly_occurrence
-  #   condition: value >= 1 && value <= 5
-  #   message:   must be between 1 and 5
-  # path: assessment.schedule.day_of_week
-  #   source:    validation.StringInSlice value list is not a literal []string - likely a generated PossibleValuesFor*() helper; resolve separately
-  # path: assessment.schedule.start_time
-  #   condition: can(regex("^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$", value))
-  #   message:   duration must match the format HH:mm
-  # path: key_vault_credential.name
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: key_vault_credential.key_vault_url
-  #   source:    validation.IsURLWithHTTPS(...) - no translation rule yet, add one
-  # path: key_vault_credential.service_principal_name
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: key_vault_credential.service_principal_secret
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: sql_connectivity_port
-  #   condition: value >= 1024 && value <= 65535
-  #   message:   must be between 1024 and 65535
-  # path: sql_connectivity_type
-  #   source:    validation.StringInSlice value list is not a literal []string - likely a generated PossibleValuesFor*() helper; resolve separately
-  # path: sql_connectivity_update_password
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: sql_connectivity_update_username
-  #   source:    [from validate.SqlVirtualMachineLoginUserName] !ok
-  # path: sql_connectivity_update_username
-  #   source:    [from validate.SqlVirtualMachineLoginUserName] !regexp.MustCompile(`^[^\\/"\[\]:|<>+=;,?* .]{2,128}$`).MatchString(v)
-  # path: sql_instance.collation
-  #   source:    validate.DatabaseCollation: no recognizable `if ... { errors = append(...) }` pattern - read it by hand
-  # path: sql_instance.max_dop
-  #   condition: value >= 0 && value <= 32767
-  #   message:   must be between 0 and 32767
-  # path: sql_instance.max_server_memory_mb
-  #   source:    validation.IntBetween(128, math.MaxInt32) - bound(s) not a literal int (e.g. a named constant like math.MaxInt32) - resolve manually
-  # path: sql_instance.min_server_memory_mb
-  #   source:    validation.IntBetween(0, math.MaxInt32) - bound(s) not a literal int (e.g. a named constant like math.MaxInt32) - resolve manually
-  # path: storage_configuration.disk_type
-  #   source:    validation.StringInSlice value list is not a literal []string - likely a generated PossibleValuesFor*() helper; resolve separately
-  # path: storage_configuration.storage_workload_type
-  #   source:    validation.StringInSlice value list is not a literal []string - likely a generated PossibleValuesFor*() helper; resolve separately
-  # path: storage_configuration.data_settings.default_file_path
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: storage_configuration.log_settings.default_file_path
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: storage_configuration.temp_db_settings.default_file_path
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: sql_virtual_machine_group_id
-  #   source:    [from sqlvirtualmachinegroups.ValidateSqlVirtualMachineGroupID] !ok
-  # path: sql_virtual_machine_group_id
-  #   source:    [from sqlvirtualmachinegroups.ValidateSqlVirtualMachineGroupID] err != nil
-  # path: wsfc_domain_credential.cluster_bootstrap_account_password
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: wsfc_domain_credential.cluster_operator_account_password
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: wsfc_domain_credential.sql_service_account_password
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: tags
-  #   condition: length(value) <= 50
-  #   message:   [from tags.Validate: invalid when len(value) > 50]
-  #   source:    [from tags.Validate: invalid when len(value) > 50]
-  # path: tags
-  #   condition: length(value) <= 512
-  #   message:   [from tags.Validate: invalid when len(value) > 512]
-  #   source:    [from tags.Validate: invalid when len(value) > 512]
-  # path: tags
-  #   source:    [from tags.Validate] err != nil
-  # path: tags
-  #   condition: length(value) <= 256
-  #   message:   [from tags.Validate: invalid when len(value) > 256]
-  #   source:    [from tags.Validate: invalid when len(value) > 256]
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.auto_backup == null || (v.auto_backup.encryption_password == null || (length(v.auto_backup.encryption_password) > 0))
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.auto_backup == null || (v.auto_backup.manual_schedule == null || (v.auto_backup.manual_schedule.full_backup_start_hour >= 0 && v.auto_backup.manual_schedule.full_backup_start_hour <= 23))
+      )
+    ])
+    error_message = "must be between 0 and 23"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.auto_backup == null || (v.auto_backup.manual_schedule == null || (v.auto_backup.manual_schedule.full_backup_window_in_hours >= 1 && v.auto_backup.manual_schedule.full_backup_window_in_hours <= 23))
+      )
+    ])
+    error_message = "must be between 1 and 23"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.auto_backup == null || (v.auto_backup.manual_schedule == null || (v.auto_backup.manual_schedule.log_backup_frequency_in_minutes >= 5 && v.auto_backup.manual_schedule.log_backup_frequency_in_minutes <= 60))
+      )
+    ])
+    error_message = "must be between 5 and 60"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.auto_backup == null || (v.auto_backup.retention_period_in_days >= 1 && v.auto_backup.retention_period_in_days <= 30)
+      )
+    ])
+    error_message = "must be between 1 and 30"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.auto_backup == null || (can(base64decode(v.auto_backup.storage_account_access_key)))
+      )
+    ])
+    error_message = "must be valid base64"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.auto_patching == null || (v.auto_patching.maintenance_window_duration_in_minutes >= 30 && v.auto_patching.maintenance_window_duration_in_minutes <= 180)
+      )
+    ])
+    error_message = "must be between 30 and 180"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.auto_patching == null || (v.auto_patching.maintenance_window_starting_hour >= 0 && v.auto_patching.maintenance_window_starting_hour <= 23)
+      )
+    ])
+    error_message = "must be between 0 and 23"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.assessment == null || (v.assessment.schedule == null || (v.assessment.schedule.weekly_interval == null || (v.assessment.schedule.weekly_interval >= 1 && v.assessment.schedule.weekly_interval <= 6)))
+      )
+    ])
+    error_message = "must be between 1 and 6"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.assessment == null || (v.assessment.schedule == null || (v.assessment.schedule.monthly_occurrence == null || (v.assessment.schedule.monthly_occurrence >= 1 && v.assessment.schedule.monthly_occurrence <= 5)))
+      )
+    ])
+    error_message = "must be between 1 and 5"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.assessment == null || (v.assessment.schedule == null || (can(regex("^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$", v.assessment.schedule.start_time))))
+      )
+    ])
+    error_message = "duration must match the format HH:mm"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.key_vault_credential == null || (length(v.key_vault_credential.name) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.key_vault_credential == null || (length(v.key_vault_credential.service_principal_name) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.key_vault_credential == null || (length(v.key_vault_credential.service_principal_secret) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.sql_connectivity_port == null || (v.sql_connectivity_port >= 1024 && v.sql_connectivity_port <= 65535)
+      )
+    ])
+    error_message = "must be between 1024 and 65535"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.sql_connectivity_update_password == null || (length(v.sql_connectivity_update_password) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.sql_instance == null || (v.sql_instance.max_dop == null || (v.sql_instance.max_dop >= 0 && v.sql_instance.max_dop <= 32767))
+      )
+    ])
+    error_message = "must be between 0 and 32767"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.storage_configuration == null || (v.storage_configuration.data_settings == null || (length(v.storage_configuration.data_settings.default_file_path) > 0))
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.storage_configuration == null || (v.storage_configuration.log_settings == null || (length(v.storage_configuration.log_settings.default_file_path) > 0))
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.storage_configuration == null || (v.storage_configuration.temp_db_settings == null || (length(v.storage_configuration.temp_db_settings.default_file_path) > 0))
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.wsfc_domain_credential == null || (length(v.wsfc_domain_credential.cluster_bootstrap_account_password) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.wsfc_domain_credential == null || (length(v.wsfc_domain_credential.cluster_operator_account_password) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.wsfc_domain_credential == null || (length(v.wsfc_domain_credential.sql_service_account_password) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_virtual_machines : (
+        v.tags == null || (length(v.tags) <= 50)
+      )
+    ])
+    error_message = "[from tags.Validate: invalid when len(value) > 50]"
+  }
+  # Note: 22 additional provider-side validators are enforced at apply time but not mirrored as validation{} blocks here (bespoke or non-mechanically-translatable).
 }
 
